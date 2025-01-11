@@ -1,0 +1,32 @@
+﻿@page
+@model ProfileModel
+@{
+    ViewData["Title"] = "Your Profile";
+}
+
+<h1>Your Profile</h1>
+
+@if (Model.LoggedInUser != null)
+{
+    <p><strong>Name:</strong> @Model.LoggedInUser.FirstName @Model.LoggedInUser.LastName</p>
+    <p><strong>Email:</strong> @Model.LoggedInUser.Email</p>
+    <p><strong>Likes:</strong> @Model.LoggedInUser.Likes</p>
+    <p><strong>Dislikes:</strong> @Model.LoggedInUser.Dislikes</p>
+    <p><strong>Age:</strong> @Model.LoggedInUser.Age</p>
+    <p><strong>Country of Birth:</strong> @Model.LoggedInUser.CountryOfBirth</p>
+    <p><strong>Movie Goal:</strong> @Model.MovieGoal movies in 2024</p>
+
+    @if (!string.IsNullOrEmpty(Model.LoggedInUser.ProfilePicturePath))
+    {
+        <p><strong>Profile Picture:</strong></p>
+        <img src="@Model.LoggedInUser.ProfilePicturePath" alt="Profile Picture" class="img-thumbnail" />
+    }
+}
+else
+{
+    <p>User data could not be loaded.</p>
+}
+
+<a asp-page="/Home/Index" class="btn btn-primary">Go Back to Home</a>
+<a asp-page="/Profile/Edit" class="btn btn-secondary">Edit Profile</a>
+

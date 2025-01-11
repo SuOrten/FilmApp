@@ -1,0 +1,26 @@
+﻿@page
+@model EditProfileModel
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<h1>Edit Your Profile</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <label for="Likes">Likes:</label>
+    <input type="text" id="Likes" asp-for="Likes" class="form-control" />
+
+    <label for="Dislikes">Dislikes:</label>
+    <input type="text" id="Dislikes" asp-for="Dislikes" class="form-control" />
+
+    <label for="Age">Age:</label>
+    <input type="number" id="Age" asp-for="Age" class="form-control" />
+
+    <label for="CountryOfBirth">Country of Birth:</label>
+    <input type="text" id="CountryOfBirth" asp-for="CountryOfBirth" class="form-control" />
+
+    <label for="ProfilePicture">Profile Picture:</label>
+    <input type="file" id="ProfilePicture" asp-for="ProfilePicture" class="form-control" />
+
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+</form>

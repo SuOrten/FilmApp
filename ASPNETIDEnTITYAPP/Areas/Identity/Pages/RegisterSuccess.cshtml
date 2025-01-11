@@ -1,0 +1,31 @@
+﻿@page
+@model RegisterSuccessModel
+@{
+    ViewData["Title"] = "Registration Success";
+}
+
+<h1>Welcome!</h1>
+<p>You have successfully registered. Now go set a movie goal!</p>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center">Set a Movie Goal!</h2>
+                <p class="text-center">
+                    Tell us how many movies you plan to watch this year, and we'll help you keep track!
+                </p>
+
+                <form asp-page="/Goal/Create" method="post" class="mt-4">
+                    <div class="input-group mb-3">
+                        <input type="number" name="movieGoal" class="form-control" placeholder="Enter your movie goal" min="1" required />
+                        <button type="submit" class="btn btn-primary">Set Goal</button>
+                    </div>
+                </form>
+                <a asp-page="/Home/Index" class="btn btn-secondary btn-block mt-3">Skip this step</a>
+            </div>
+        </div>
+    </div>
+</div>

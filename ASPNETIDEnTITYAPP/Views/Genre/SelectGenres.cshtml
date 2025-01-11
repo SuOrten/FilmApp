@@ -1,0 +1,15 @@
+﻿@model List<ASPNETIDEnTITYAPP.Models.Genre>
+
+<h2>Select Your Favorite Genres</h2>
+<form method="post" asp-action="SaveUserGenres" asp-controller="Genre">
+    <div>
+        @foreach (var genre in Model)
+        {
+            <div>
+                <input type="checkbox" name="selectedGenreIds" value="@genre.Id" id="genre-@genre.Id" />
+                <label for="genre-@genre.Id">@genre.Name</label>
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
