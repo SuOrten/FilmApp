@@ -10,9 +10,10 @@
             <label for="movie-@movie.Id">
                 <strong>@movie.Title</strong>
                 <br />
-                <img src="https://image.tmdb.org/t/p/w200/@movie.PosterPath" alt="@movie.Title Poster" />
+                <img src="https://image.tmdb.org/t/p/w200/@(movie.Poster_Path)" alt="@movie.Title Poster" />
                 <br />
-                <span>Rating: @movie.VoteAverage</span>
+                
+                <span>Rating: @movie.Vote_Average</span>
             </label>
         </div>
         <hr />

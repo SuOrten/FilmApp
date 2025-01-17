@@ -72,8 +72,8 @@ public class GenreController : Controller
             {
                 MovieId = movie.Id,
                 Title = movie.Title,
-                PosterPath = movie.PosterPath ?? "Undefined",
-                VoteAverage = movie.VoteAverage
+                PosterPath = movie.Poster_Path ?? "Undefined",
+                VoteAverage = movie.Vote_Average
             });
         }
 
