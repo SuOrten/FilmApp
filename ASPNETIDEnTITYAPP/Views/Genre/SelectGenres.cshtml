@@ -1,7 +1,8 @@
 ﻿@model List<ASPNETIDEnTITYAPP.Models.Genre>
 
 <h2>Select Your Favorite Genres</h2>
-<form method="post" asp-action="SaveUserGenres" asp-controller="Genre">
+
+<form method="post" asp-action="SaveUserGenres">
     <div>
         @foreach (var genre in Model)
         {

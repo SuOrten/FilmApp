@@ -1,0 +1,21 @@
+﻿@model List<ASPNETIDEnTITYAPP.Models.Movie>
+
+<h2>Recommended Movies</h2>
+
+<form method="post" asp-action="SaveMoviesToList" asp-controller="Genre">
+    @foreach (var movie in Model)
+    {
+        <div>
+            <input type="checkbox" name="selectedMovieIds" value="@movie.Id" id="movie-@movie.Id" />
+            <label for="movie-@movie.Id">
+                <strong>@movie.Title</strong>
+                <br />
+                <img src="https://image.tmdb.org/t/p/w200/@movie.PosterPath" alt="@movie.Title Poster" />
+                <br />
+                <span>Rating: @movie.VoteAverage</span>
+            </label>
+        </div>
+        <hr />
+    }
+    <button type="submit" class="btn btn-primary">Add to List</button>
+</form>

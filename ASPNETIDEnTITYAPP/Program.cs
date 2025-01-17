@@ -22,6 +22,12 @@ builder.Services.AddIdentity<SampleUser, IdentityRole<int>>(options => options.S
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+builder.Services.AddHttpClient(); // Add HttpClient service here
+
+// Register GenreService and MovieService
+builder.Services.AddHttpClient<GenreService>();
+builder.Services.AddHttpClient<MovieService>();
+
 
 // Register the SendGridEmailSender service
 var sendGridApiKey = builder.Configuration["SendGrid:ApiKey"];

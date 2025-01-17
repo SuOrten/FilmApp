@@ -1,0 +1,22 @@
+﻿@model List<MovieInList>
+
+<h2>Your Movie Lists</h2>
+
+@if (Model.Any())
+{
+    @foreach (var list in Model)
+    {
+        <div>
+            <h3>@list.Title</h3>
+            
+
+        
+
+            
+        </div>
+    }
+}
+else
+{
+    <p>You haven't created any movie lists yet.</p>
+}

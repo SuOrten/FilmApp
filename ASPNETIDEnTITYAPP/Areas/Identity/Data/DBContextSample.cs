@@ -18,6 +18,10 @@ public class DBContextSample : IdentityDbContext<SampleUser, IdentityRole<int>, 
     public DbSet<Genre> Genres { get; set; }
     public DbSet<UserGenre> UserGenres { get; set; }
 
+    public DbSet<MovieList> MovieLists { get; set; }
+    public DbSet<MovieInList> MovieInLists { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

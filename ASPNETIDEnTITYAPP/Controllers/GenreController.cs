@@ -1,56 +1,89 @@
-﻿using ASPNETIDEnTITYAPP.Areas.Identity.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using ASPNETIDEnTITYAPP.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Threading.Tasks;
+using ASPNETIDEnTITYAPP.Areas.Identity.Data;
 
-namespace ASPNETIDEnTITYAPP.Controllers
+public class GenreController : Controller
 {
-    [Authorize] // Ensure only logged-in users can access
-    public class GenreController : Controller
+    private readonly GenreService _genreService;
+    private readonly MovieService _movieService; // Add this line
+    private readonly DBContextSample _context;
+
+   
+    public GenreController(GenreService genreService, MovieService movieService, DBContextSample dBContextSample)
     {
-        private readonly DBContextSample _context;
-
-        public GenreController(DBContextSample context)
-        {
-            _context = context;
-        }
-
-        // Display the list of genres for the user to select
-        public IActionResult SelectGenres()
-        {
-            var genres = _context.Genres.ToList(); // Fetch all genres from the database
-            return View(genres); // Pass genres to the view
-        }
-
-        // Save the genres selected by the user
-        [HttpPost]
-        public IActionResult SaveUserGenres(List<int> selectedGenreIds)
-        {
-            // Get the logged-in user's ID (retrieved as a string)
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-
-            if (userId == null)
-            {
-                return Unauthorized(); // Return an unauthorized status if user ID is not found
-            }
-
-            // Remove existing genres for the user
-            var existingUserGenres = _context.UserGenres.Where(ug => ug.UserId == userId);
-            _context.UserGenres.RemoveRange(existingUserGenres);
-
-            // Add the new genres selected by the user
-            foreach (var genreId in selectedGenreIds)
-            {
-                _context.UserGenres.Add(new UserGenre
-                {
-                    UserId = userId, // Use the string UserId directly
-                    GenreId = genreId
-                });
-            }
-
-            _context.SaveChanges(); // Save changes to the database
-            return RedirectToAction("Index", "Home"); // Redirect to the home page or another appropriate page
-        }
+        _genreService = genreService;
+        _movieService = movieService; // Assign the MovieService here
+        _context = dBContextSample;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> SelectGenres()
+    {
+        var genres = await _genreService.GetGenresAsync();
+        return View(genres);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ShowMovies(List<int> genreIds)
+    {
+        var movies = await _movieService.GetMoviesByGenresAsync(genreIds);
+        return View(movies);
+    }
+
+
+    [HttpPost]
+    public IActionResult SaveUserGenres(List<int> selectedGenreIds)
+    {
+        // Save user-selected genres in the database or session
+        // TODO: Implement database logic to store the user's selected genres
+
+        // Redirect to movie display after genres are saved
+        return RedirectToAction("ShowMovies");
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> SaveMoviesToList(List<int> selectedMovieIds)
+    {
+        // Get the logged-in user's ID
+        //var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+        if (userId == null)
+        {
+            return Unauthorized(); // Return unauthorized if the user is not logged in
+        }
+
+        // Create a new movie list
+        var movieList = new MovieList
+        {
+            Name = "My Movie List", // You can customize this name or let the user provide it
+            UserId = userId,
+            Movies = new List<MovieInList>()
+        };
+
+        // Fetch movie details from TMDb API and add them to the list
+        foreach (var movieId in selectedMovieIds)
+        {
+            // Ideally, fetch the movie details from the MovieService
+            var movie = await _movieService.GetMovieDetailsAsync(movieId); // Add a method to fetch movie details
+
+            movieList.Movies.Add(new MovieInList
+            {
+                MovieId = movie.Id,
+                Title = movie.Title,
+                PosterPath = movie.PosterPath ?? "Undefined",
+                VoteAverage = movie.VoteAverage
+            });
+        }
+
+        // Save the movie list to the database
+        _context.MovieLists.Add(movieList);
+        await _context.SaveChangesAsync();
+
+        // Redirect to the home page
+        return RedirectToAction("MovieListHome", "Home");
+    }
+
+
 }
